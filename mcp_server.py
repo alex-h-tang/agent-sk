@@ -9,6 +9,7 @@ async def serve():
     server = kernel.as_mcp_server(server_name="cs_assistant_sk")
 
     async with stdio_server() as (reader, writer):
+        print("Server started. Press Ctrl+C to stop.")
         await server.run(reader, writer, server.create_initialization_options())
 
 if __name__ == "__main__":

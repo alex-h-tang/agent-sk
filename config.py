@@ -32,4 +32,15 @@ def create_dataverse_client(api_url: str):
             resp.raise_for_status()
             return resp.json()
 
+        def query_with_params(self, table: str, params: dict) -> list[dict]:
+            url = f"{self.base_url}/{table}"
+            resp = requests.get(
+                url,
+                headers=self.headers,
+                params=params,
+                timeout=10
+            )
+            resp.raise_for_status()
+            return resp.json()
+
     return DataverseClient(api_url, headers)

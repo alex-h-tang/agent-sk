@@ -13,9 +13,9 @@ from plugins.products_plugin import ProductsPlugin
 load_dotenv()
 
 async def build_kernel() -> Kernel:
-    k = Kernel()
+    kernel = Kernel()
 
-    k.add_service(
+    kernel.add_service(
         AzureChatCompletion(
             deployment_name=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
             api_key=os.getenv("AZURE_OPENAI_API_KEY"),
@@ -25,11 +25,11 @@ async def build_kernel() -> Kernel:
 
     dv = create_dataverse_client(os.getenv("DATAVERSE_URL"))
 
-    k.add_plugin(AccountsPlugin(dv), plugin_name="Accounts")
-    k.add_plugin(OpportunitiesPlugin(dv), plugin_name="Opportunities")
-    k.add_plugin(ProductsPlugin(dv), plugin_name="Products")
+    kernel.add_plugin(AccountsPlugin(dv), plugin_name="Accounts")
+    kernel.add_plugin(OpportunitiesPlugin(dv), plugin_name="Opportunities")
+    kernel.add_plugin(ProductsPlugin(dv), plugin_name="Products")
 
-    return k
+    return kernel
 
 async def main():
     kernel = await build_kernel()
