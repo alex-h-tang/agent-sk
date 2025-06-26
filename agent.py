@@ -31,11 +31,11 @@ async def run_agent():
         agent = ChatCompletionAgent(
             service=kernel.get_service("chat"),
             name="SalesAssistant",
-            instructions="You are a sales-data assistant. Use the right plugins to answer questions.",
+            instructions="You are a sales-data assistant. Use the right plugins to answer questions. When a request is made involving names, be sure to split the names up, and check if the substrings return results.",
             plugins=[mcp_plugin],
             arguments=KernelArguments()
         )
-        
+
         thread = None
 
         print("How can I help you today?")

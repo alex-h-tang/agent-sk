@@ -43,7 +43,7 @@ class AccountsPlugin:
     @kernel_function
     async def inspect_account_fields(self) -> list[str]:
         """
-        Return the columns for an opportunity record
+        Return the columns for an account record
         """
         record = self.dv.query("accounts", "$top=1")[0]
         return list(record.keys())

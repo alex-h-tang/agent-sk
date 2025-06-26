@@ -12,6 +12,7 @@ from plugins.products_plugin import ProductsPlugin
 from plugins.leads_plugin import LeadsPlugin
 from plugins.orders_plugin import OrdersPlugin
 from plugins.quotes_plugin import QuotesPlugin
+from plugins.users_plugin import UsersPlugin
 
 load_dotenv()
 
@@ -34,6 +35,7 @@ async def build_kernel() -> Kernel:
     kernel.add_plugin(LeadsPlugin(dv), plugin_name="Leads")
     kernel.add_plugin(OrdersPlugin(dv), plugin_name="Orders")
     kernel.add_plugin(QuotesPlugin(dv), plugin_name="Quotes")
+    kernel.add_plugin(UsersPlugin(dv), plugin_name="Users")
 
     return kernel
 
