@@ -9,6 +9,9 @@ from config import create_dataverse_client
 from plugins.accounts_plugin import AccountsPlugin
 from plugins.opportunities_plugin import OpportunitiesPlugin
 from plugins.products_plugin import ProductsPlugin
+from plugins.leads_plugin import LeadsPlugin
+from plugins.orders_plugin import OrdersPlugin
+from plugins.quotes_plugin import QuotesPlugin
 
 load_dotenv()
 
@@ -28,6 +31,9 @@ async def build_kernel() -> Kernel:
     kernel.add_plugin(AccountsPlugin(dv), plugin_name="Accounts")
     kernel.add_plugin(OpportunitiesPlugin(dv), plugin_name="Opportunities")
     kernel.add_plugin(ProductsPlugin(dv), plugin_name="Products")
+    kernel.add_plugin(LeadsPlugin(dv), plugin_name="Leads")
+    kernel.add_plugin(OrdersPlugin(dv), plugin_name="Orders")
+    kernel.add_plugin(QuotesPlugin(dv), plugin_name="Quotes")
 
     return kernel
 

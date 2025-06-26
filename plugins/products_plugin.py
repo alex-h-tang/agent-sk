@@ -1,4 +1,5 @@
 from semantic_kernel.functions import kernel_function
+
 class ProductsPlugin:
     def __init__(self, dv_client):
         self.dv = dv_client
