@@ -18,3 +18,11 @@ class OrdersPlugin:
         Retrieve a single order by its order number.
         """
         return self.dv.retrieve("salesorders", order_number)
+    
+    @kernel_function
+    async def inspect_order_fields(self) -> list[str]:
+        """
+        Return the columns for an order record.
+        """
+        record = self.dv.query("salesorders", "$top=1")[0]
+        return list(record.keys())

@@ -18,3 +18,11 @@ class LeadsPlugin:
         Retrieve a single lead by its ID.
         """
         return self.dv.retrieve("leads", lead_id)
+    
+    @kernel_function
+    async def inspect_lead_fields(self) -> list[str]:
+        """
+        Return the columns for a lead record.
+        """
+        record = self.dv.query("leads", "$top=1")[0]
+        return list(record.keys())

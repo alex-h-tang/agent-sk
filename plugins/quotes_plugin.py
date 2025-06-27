@@ -19,4 +19,11 @@ class QuotesPlugin:
         """
         return self.dv.retrieve("quotes", quote_id)
     
+    @kernel_function
+    async def inspect_quote_fields(self) -> list[str]:
+        """
+        Return the columns for a quote record.
+        """
+        record = self.dv.query("quotes", "$top=1")[0]
+        return list(record.keys())
     

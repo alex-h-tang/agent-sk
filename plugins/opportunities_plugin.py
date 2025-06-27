@@ -19,6 +19,14 @@ class OpportunitiesPlugin:
         """
         return self.dv.retrieve("opportunities", opportunity_id)
 
+    @kernel_function
+    async def list_opportunities_by_owner(self, user_id: str) -> list[dict]:
+        """
+        List opportunities owned by a specific user, based on user_id, which can be obtained from the users plugin.
+        """
+        odata_query = f"$filter=_ownerid_value eq {user_id}"
+        return self.dv.query("opportunities", odata_query)
+
     # doesn't work 
     # @kernel_function
     # async def get_opportunity_by_account(self, account_id: str) -> list[dict]:
