@@ -1,16 +1,30 @@
-import asyncio
-from semantic_kernel import Kernel
-from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
-from mcp.server.stdio import stdio_server
-from main import build_kernel
+import os
+from dotenv import load_dotenv
+from mcp.server.fastmcp import FastMCP
+from contextlib import asynccontextmanager
+from collections.abc import AsyncIterator
+from dataclasses import dataclass
 
-async def serve():
-    kernel = await build_kernel()
-    server = kernel.as_mcp_server(server_name="cs_assistant_sk")
+from config import create_dataverse_client
+from plugins.accounts_plugin import AccountsPlugin
+from plugins.opportunities_plugin import OpportunitiesPlugin
+from plugins.products_plugin import ProductsPlugin
+from plugins.leads_plugin import LeadsPlugin
+from plugins.orders_plugin import OrdersPlugin
+from plugins.quotes_plugin import QuotesPlugin
+from plugins.users_plugin import UsersPlugin
 
-    async with stdio_server() as (reader, writer):
-        print("Server started. Press Ctrl+C to stop.")
-        await server.run(reader, writer, server.create_initialization_options())
+load_dotenv()
 
-if __name__ == "__main__":
-    asyncio.run(serve())
+@dataclass
+class AppContext:
+    dv_client: object
+
+@asynccontextmanager
+async def app_lifespan(server: FastMCP) -> AsyncIterator[AppContext]:
+    # print("Initializing Dataverse client")
+    dv_client = create_dataverse_client(os.getenv("DATAVERSE_URL"))
+    yield AppContext(dv_client=dv_client)
+    # print("Server shutting down")
+
+mcp = FastMCP("DataverseServer", lifespan=app_lifespan)

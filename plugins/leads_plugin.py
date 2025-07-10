@@ -26,3 +26,10 @@ class LeadsPlugin:
         """
         record = self.dv.query("leads", "$top=1")[0]
         return list(record.keys())
+    
+    # @kernel_function
+    # async def create_lead(self, lead_data: dict) -> dict:
+    #     """
+    #     Create a new lead in Dataverse.
+    #     """
+    #     return self.dv.create("leads", lead_data)

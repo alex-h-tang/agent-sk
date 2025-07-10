@@ -1,7 +1,6 @@
 import os
 import asyncio
 from dotenv import load_dotenv
-
 from semantic_kernel import Kernel
 from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
 
@@ -39,17 +38,17 @@ async def build_kernel() -> Kernel:
 
     return kernel
 
-async def main():
-    kernel = await build_kernel()
+# async def main():
+#     kernel = await build_kernel()
 
-    result = await kernel.invoke(
-        plugin_name="Accounts",
-        function_name="list_accounts",
-        top=3
-    )
+#     result = await kernel.invoke(
+#         plugin_name="Accounts",
+#         function_name="list_accounts",
+#         top=3
+#     )
 
-    accounts = result.value
-    print("Top 3 accounts:", accounts)
+#     accounts = result.value
+#     print("Top 3 accounts:", accounts)
 
-if __name__ == "__main__":
-    asyncio.run(main())
+# if __name__ == "__main__":
+#     asyncio.run(main())
