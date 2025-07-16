@@ -1,0 +1,10 @@
+info:
+  title: 'Sales Dataverse MCP Server'
+  description: 'MCP server that connects to various Sales Dataverse tables.'
+  version: '1.0'
+host: 'dataversemcp-h4ayfyf8ene9bycq.eastus-01.azurewebsites.net'
+schemes:
+  - https
+x-ms-capabilities:
+  model-context-protocol:
+    transport: streamable-http

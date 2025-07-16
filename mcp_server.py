@@ -4,6 +4,7 @@ from mcp.server.fastmcp import FastMCP
 from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
 from dataclasses import dataclass
+from fastapi import FastAPI
 import inspect
 
 from config import create_dataverse_client
@@ -30,7 +31,7 @@ async def app_lifespan(server: FastMCP) -> AsyncIterator[AppContext]:
 
 mcp = FastMCP("DataverseServer", lifespan=app_lifespan)
 
-def register_plugins(mcp_server: FastMCP, plugin_classes):
+def register_plugins(mcp_server: FastMCP, plugin_classes: list):
     for plugin_class in plugin_classes:
         for method_name, method_object in inspect.getmembers(plugin_class, predicate=inspect.isfunction):
             if method_name.startswith('_'):
@@ -60,3 +61,6 @@ plugins = [
 ]
 
 register_plugins(mcp, plugins)
+
+if __name__ == "__main__":
+    mcp.run()

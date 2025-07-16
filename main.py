@@ -1,5 +1,4 @@
 import os
-import asyncio
 from dotenv import load_dotenv
 from semantic_kernel import Kernel
 from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
