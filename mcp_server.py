@@ -1,10 +1,12 @@
 import os
+import asyncio
 from dotenv import load_dotenv
-from mcp.server.fastmcp import FastMCP
+# from mcp.server.fastmcp import FastMCP
+from fastmcp import FastMCP, Context
+from fastmcp.server.dependencies import get_context
 from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
 from dataclasses import dataclass
-from fastapi import FastAPI
 import inspect
 
 from config import create_dataverse_client
@@ -36,19 +38,31 @@ def register_plugins(mcp_server: FastMCP, plugin_classes: list):
         for method_name, method_object in inspect.getmembers(plugin_class, predicate=inspect.isfunction):
             if method_name.startswith('_'):
                 continue
-            def create_tool_executor(p_class, m_name):
+
+            def create_tool_function(p_class, m_name):
+
                 original_method = getattr(p_class, m_name)
-                def tool_executor(**kwargs):
-                    ctx = mcp_server.get_context()
-                    dv_client = ctx.request_context.lifespan_context.dv_client
+
+                async def tool_function(**kwargs):
+                    ctx = get_context()
+                    dv_client = ctx.lifespan_context.dv_client
                     plugin_instance = p_class(dv_client)
-                    return getattr(plugin_instance, m_name)(**kwargs)
-                tool_executor.__signature__ = inspect.signature(original_method)
-                tool_executor.__doc__ = inspect.getdoc(original_method)
-                return tool_executor
-            tool_function = create_tool_executor(plugin_class, method_name)
+                    result = getattr(plugin_instance, m_name)(**kwargs)
+                    if inspect.isawaitable(result):
+                        return await result
+                    return result
+
+                original_sig = inspect.signature(original_method)
+                params_without_self = [p for name, p in original_sig.parameters.items() if name != 'self']
+                tool_function.__signature__ = original_sig.replace(parameters=params_without_self)
+                tool_function.__doc__ = inspect.getdoc(original_method)
+                
+                return tool_function
+
+            tool_func = create_tool_function(plugin_class, method_name)
             tool_name = f"{plugin_class.__name__}_{method_name}"
-            mcp_server.tool(name=tool_name)(tool_function)
+            
+            mcp_server.tool(name=tool_name)(tool_func)
 
 plugins = [
     AccountsPlugin,
@@ -62,5 +76,14 @@ plugins = [
 
 register_plugins(mcp, plugins)
 
-if __name__ == "__main__":
-    mcp.run()
+# async def print_tools():
+#     tools = await mcp.list_tools()
+#     for tool_name in tools:
+#         print("  -", tool_name)
+
+# asyncio.run(print_tools())
+
+# app = mcp.sse_app
+
+# if __name__ == "__main__":
+#     mcp.run()

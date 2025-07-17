@@ -6,6 +6,7 @@ from semantic_kernel import Kernel
 from semantic_kernel.agents import ChatCompletionAgent
 from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
 from semantic_kernel.connectors.mcp import MCPStreamableHttpPlugin
+from semantic_kernel.connectors.mcp import MCPSsePlugin
 from semantic_kernel.functions import KernelArguments
 
 load_dotenv()
@@ -21,7 +22,7 @@ async def run_agent():
         api_version=os.getenv("AZURE_OPENAI_API_VERSION")
     ))
 
-    mcp_plugin = MCPStreamableHttpPlugin(
+    mcp_plugin = MCPSsePlugin(
         name="DataverseServer",
         description="Dataverse-backed tools for sales",
         url="http://localhost:8000" 

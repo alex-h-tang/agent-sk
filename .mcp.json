@@ -1,0 +1,409 @@
+{
+  "name": "SalesDataverseServer",
+  "schema_version": "1.0",
+  "tools": [
+    {
+      "name": "AccountsPlugin_get_account",
+      "title": "AccountsPlugin Get account",
+      "description": "Retrieve a single account by its ID.",
+      "inputSchema": {
+        "title": "get_accountInput",
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "title": "Account id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "account_id"
+        ]
+      }
+    },
+    {
+      "name": "AccountsPlugin_inspect_account_fields",
+      "title": "AccountsPlugin Inspect account fields",
+      "description": "Return the columns for an account record",
+      "inputSchema": {
+        "title": "inspect_account_fieldsInput",
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "name": "AccountsPlugin_list_accounts",
+      "title": "AccountsPlugin List accounts",
+      "description": "List the top N accounts from Dataverse. Optional filters for region, status, and sorting. Status must be numeric code, 0 for active, 1 for inactive. If sort_by is provided, sort_direction must also be provided as 'asc' or 'desc'.",
+      "inputSchema": {
+        "title": "list_accountsInput",
+        "type": "object",
+        "properties": {
+          "top": {
+            "title": "Top",
+            "type": "integer",
+            "default": 5
+          },
+          "region": {
+            "title": "Region",
+            "type": "string",
+            "default": null
+          },
+          "status": {
+            "title": "Status",
+            "type": "string",
+            "default": null
+          },
+          "sort_by": {
+            "title": "Sort by",
+            "type": "string",
+            "default": null
+          },
+          "sort_direction": {
+            "title": "Sort direction",
+            "type": "string",
+            "default": null
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "OpportunitiesPlugin_get_opportunity",
+      "title": "OpportunitiesPlugin Get opportunity",
+      "description": "Retrieve a single opportunity by its ID.",
+      "inputSchema": {
+        "title": "get_opportunityInput",
+        "type": "object",
+        "properties": {
+          "opportunity_id": {
+            "title": "Opportunity id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "opportunity_id"
+        ]
+      }
+    },
+    {
+      "name": "OpportunitiesPlugin_inspect_opportunity_fields",
+      "title": "OpportunitiesPlugin Inspect opportunity fields",
+      "description": "Return the columns for an opportunity record",
+      "inputSchema": {
+        "title": "inspect_opportunity_fieldsInput",
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "name": "OpportunitiesPlugin_list_opportunities",
+      "title": "OpportunitiesPlugin List opportunities",
+      "description": "List the top N opportunities from Dataverse.",
+      "inputSchema": {
+        "title": "list_opportunitiesInput",
+        "type": "object",
+        "properties": {
+          "top": {
+            "title": "Top",
+            "type": "integer",
+            "default": 5
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "OpportunitiesPlugin_list_opportunities_by_owner",
+      "title": "OpportunitiesPlugin List opportunities by owner",
+      "description": "List opportunities owned by a specific user, based on user_id, which can be obtained from the users plugin.",
+      "inputSchema": {
+        "title": "list_opportunities_by_ownerInput",
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "title": "User id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      }
+    },
+    {
+      "name": "ProductsPlugin_get_product",
+      "title": "ProductsPlugin Get product",
+      "description": "Retrieve a single product by its ID.",
+      "inputSchema": {
+        "title": "get_productInput",
+        "type": "object",
+        "properties": {
+          "product_id": {
+            "title": "Product id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "product_id"
+        ]
+      }
+    },
+    {
+      "name": "ProductsPlugin_list_products",
+      "title": "ProductsPlugin List products",
+      "description": "List the top N products from Dataverse.",
+      "inputSchema": {
+        "title": "list_productsInput",
+        "type": "object",
+        "properties": {
+          "top": {
+            "title": "Top",
+            "type": "integer",
+            "default": 5
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "LeadsPlugin_get_lead",
+      "title": "LeadsPlugin Get lead",
+      "description": "Retrieve a single lead by its ID.",
+      "inputSchema": {
+        "title": "get_leadInput",
+        "type": "object",
+        "properties": {
+          "lead_id": {
+            "title": "Lead id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "lead_id"
+        ]
+      }
+    },
+    {
+      "name": "LeadsPlugin_inspect_lead_fields",
+      "title": "LeadsPlugin Inspect lead fields",
+      "description": "Return the columns for a lead record.",
+      "inputSchema": {
+        "title": "inspect_lead_fieldsInput",
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "name": "LeadsPlugin_list_leads",
+      "title": "LeadsPlugin List leads",
+      "description": "List the top N leads from Dataverse.",
+      "inputSchema": {
+        "title": "list_leadsInput",
+        "type": "object",
+        "properties": {
+          "top": {
+            "title": "Top",
+            "type": "integer",
+            "default": 5
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "OrdersPlugin_get_order",
+      "title": "OrdersPlugin Get order",
+      "description": "Retrieve a single order by its order number.",
+      "inputSchema": {
+        "title": "get_orderInput",
+        "type": "object",
+        "properties": {
+          "order_number": {
+            "title": "Order number",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_number"
+        ]
+      }
+    },
+    {
+      "name": "OrdersPlugin_inspect_order_fields",
+      "title": "OrdersPlugin Inspect order fields",
+      "description": "Return the columns for an order record.",
+      "inputSchema": {
+        "title": "inspect_order_fieldsInput",
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "name": "OrdersPlugin_list_orders",
+      "title": "OrdersPlugin List orders",
+      "description": "List the top N orders from Dataverse.",
+      "inputSchema": {
+        "title": "list_ordersInput",
+        "type": "object",
+        "properties": {
+          "top": {
+            "title": "Top",
+            "type": "integer",
+            "default": 5
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "QuotesPlugin_get_quote",
+      "title": "QuotesPlugin Get quote",
+      "description": "Retrieve a single quote by its ID.",
+      "inputSchema": {
+        "title": "get_quoteInput",
+        "type": "object",
+        "properties": {
+          "quote_id": {
+            "title": "Quote id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "quote_id"
+        ]
+      }
+    },
+    {
+      "name": "QuotesPlugin_inspect_quote_fields",
+      "title": "QuotesPlugin Inspect quote fields",
+      "description": "Return the columns for a quote record.",
+      "inputSchema": {
+        "title": "inspect_quote_fieldsInput",
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "name": "QuotesPlugin_list_quotes",
+      "title": "QuotesPlugin List quotes",
+      "description": "List the top N quotes from Dataverse.",
+      "inputSchema": {
+        "title": "list_quotesInput",
+        "type": "object",
+        "properties": {
+          "top": {
+            "title": "Top",
+            "type": "integer",
+            "default": 5
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "UsersPlugin_get_business_unit_by_id",
+      "title": "UsersPlugin Get business unit by id",
+      "description": "Retrieve a business unit by its ID.",
+      "inputSchema": {
+        "title": "get_business_unit_by_idInput",
+        "type": "object",
+        "properties": {
+          "business_unit_id": {
+            "title": "Business unit id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "business_unit_id"
+        ]
+      }
+    },
+    {
+      "name": "UsersPlugin_get_direct_reports",
+      "title": "UsersPlugin Get direct reports",
+      "description": "Retrieve users who report directly to a specified manager, based on manager GUID, which can be obtained as _parentsystemuserid_value from a user's json.",
+      "inputSchema": {
+        "title": "get_direct_reportsInput",
+        "type": "object",
+        "properties": {
+          "manager": {
+            "title": "Manager",
+            "type": "string"
+          }
+        },
+        "required": [
+          "manager"
+        ]
+      }
+    },
+    {
+      "name": "UsersPlugin_get_user",
+      "title": "UsersPlugin Get user",
+      "description": "Retrieve a single user by their GUID.",
+      "inputSchema": {
+        "title": "get_userInput",
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "title": "User id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "user_id"
+        ]
+      }
+    },
+    {
+      "name": "UsersPlugin_get_users_by_name",
+      "title": "UsersPlugin Get users by name",
+      "description": "Retrieve users by at least a substring of their name.",
+      "inputSchema": {
+        "title": "get_users_by_nameInput",
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "UsersPlugin_inspect_user_fields",
+      "title": "UsersPlugin Inspect user fields",
+      "description": "Return the columns for an user record",
+      "inputSchema": {
+        "title": "inspect_user_fieldsInput",
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    },
+    {
+      "name": "UsersPlugin_list_users",
+      "title": "UsersPlugin List users",
+      "description": "List the top N users from Dataverse.",
+      "inputSchema": {
+        "title": "list_usersInput",
+        "type": "object",
+        "properties": {
+          "top": {
+            "title": "Top",
+            "type": "integer",
+            "default": 5
+          }
+        },
+        "required": []
+      }
+    }
+  ]
+}
