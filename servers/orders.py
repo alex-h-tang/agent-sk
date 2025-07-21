@@ -1,0 +1,32 @@
+from typing import List, Dict, Any
+from fastmcp import FastMCP
+
+class OrdersPluginLogic:
+    """Contains the business logic for order-related operations."""
+    def __init__(self, dv_client: Any):
+        self.dv = dv_client
+
+    async def list_orders(self, top: int = 5) -> List[Dict[str, Any]]:
+        """List the top N orders from Dataverse."""
+        odata_query = f"$top={top}"
+        return await self.dv.query("salesorders", odata_query)
+
+    async def get_order(self, order_number: str) -> Dict[str, Any]:
+        """Retrieve a single order by its order number."""
+        return await self.dv.retrieve("salesorders", order_number)
+
+    async def inspect_order_fields(self) -> List[str]:
+        """Return the columns for an order record."""
+        records = await self.dv.query("salesorders", "$top=1")
+        return list(records[0].keys()) if records else []
+
+def create_orders_plugin_server(dv_client: Any) -> FastMCP:
+    """Factory function to create and configure the Orders 'plugin' server."""
+    orders_mcp = FastMCP(name="OrdersPlugin")
+    plugin_logic = OrdersPluginLogic(dv_client)
+
+    orders_mcp.tool(plugin_logic.list_orders)
+    orders_mcp.tool(plugin_logic.get_order)
+    orders_mcp.tool(plugin_logic.inspect_order_fields)
+
+    return orders_mcp
