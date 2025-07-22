@@ -6,18 +6,18 @@ class OrdersPluginLogic:
     def __init__(self, dv_client: Any):
         self.dv = dv_client
 
-    async def list_orders(self, top: int = 5) -> List[Dict[str, Any]]:
+    def list_orders(self, top: int = 5) -> List[Dict[str, Any]]:
         """List the top N orders from Dataverse."""
         odata_query = f"$top={top}"
-        return await self.dv.query("salesorders", odata_query)
+        return self.dv.query("salesorders", odata_query)
 
-    async def get_order(self, order_number: str) -> Dict[str, Any]:
+    def get_order(self, order_number: str) -> Dict[str, Any]:
         """Retrieve a single order by its order number."""
-        return await self.dv.retrieve("salesorders", order_number)
+        return self.dv.retrieve("salesorders", order_number)
 
-    async def inspect_order_fields(self) -> List[str]:
+    def inspect_order_fields(self) -> List[str]:
         """Return the columns for an order record."""
-        records = await self.dv.query("salesorders", "$top=1")
+        records = self.dv.query("salesorders", "$top=1")
         return list(records[0].keys()) if records else []
 
 def create_orders_plugin_server(dv_client: Any) -> FastMCP:

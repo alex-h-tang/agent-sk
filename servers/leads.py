@@ -7,18 +7,18 @@ class LeadsPluginLogic:
     def __init__(self, dv_client: Any):
         self.dv = dv_client
 
-    async def list_leads(self, top: int = 5) -> List[Dict[str, Any]]:
+    def list_leads(self, top: int = 5) -> List[Dict[str, Any]]:
         """List the top N leads from Dataverse."""
         odata_query = f"$top={top}"
-        return await self.dv.query("leads", odata_query)
+        return self.dv.query("leads", odata_query)
 
-    async def get_lead(self, lead_id: str) -> Dict[str, Any]:
+    def get_lead(self, lead_id: str) -> Dict[str, Any]:
         """Retrieve a single lead by its ID."""
-        return await self.dv.retrieve("leads", lead_id)
+        return self.dv.retrieve("leads", lead_id)
 
-    async def inspect_lead_fields(self) -> List[str]:
+    def inspect_lead_fields(self) -> List[str]:
         """Return the columns for a lead record."""
-        records = await self.dv.query("leads", "$top=1")
+        records = self.dv.query("leads", "$top=1")
         return list(records[0].keys()) if records else []
 
 def create_leads_plugin_server(dv_client: Any) -> FastMCP:

@@ -6,23 +6,23 @@ class OpportunitiesPluginLogic:
     def __init__(self, dv_client: Any):
         self.dv = dv_client
 
-    async def list_opportunities(self, top: int = 5) -> List[Dict[str, Any]]:
+    def list_opportunities(self, top: int = 5) -> List[Dict[str, Any]]:
         """List the top N opportunities from Dataverse."""
         odata_query = f"$top={top}"
-        return await self.dv.query("opportunities", odata_query)
+        return self.dv.query("opportunities", odata_query)
 
-    async def get_opportunity(self, opportunity_id: str) -> Dict[str, Any]:
+    def get_opportunity(self, opportunity_id: str) -> Dict[str, Any]:
         """Retrieve a single opportunity by its ID."""
-        return await self.dv.retrieve("opportunities", opportunity_id)
+        return self.dv.retrieve("opportunities", opportunity_id)
 
-    async def list_opportunities_by_owner(self, user_id: str) -> List[Dict[str, Any]]:
+    def list_opportunities_by_owner(self, user_id: str) -> List[Dict[str, Any]]:
         """List opportunities owned by a specific user, based on user_id."""
         odata_query = f"$filter=_ownerid_value eq {user_id}"
-        return await self.dv.query("opportunities", odata_query)
+        return self.dv.query("opportunities", odata_query)
 
-    async def inspect_opportunity_fields(self) -> List[str]:
+    def inspect_opportunity_fields(self) -> List[str]:
         """Return the columns for an opportunity record."""
-        records = await self.dv.query("opportunities", "$top=1")
+        records = self.dv.query("opportunities", "$top=1")
         return list(records[0].keys()) if records else []
 
 def create_opportunities_plugin_server(dv_client: Any) -> FastMCP:

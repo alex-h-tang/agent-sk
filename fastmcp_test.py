@@ -29,7 +29,7 @@ async def run_agent():
         name="DataverseServer",
         description="A server with tools for accessing sales data from Dataverse.",
         command="python",
-        args=["fastmcp_server.py"]
+        args=["fastmcp_server.py", "--stdio"]
     ) as mcp_plugin:
 
         kernel.add_plugin(mcp_plugin)

@@ -1,4 +1,5 @@
 import os
+import sys
 from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
 from dataclasses import dataclass
@@ -63,5 +64,7 @@ def get_server_status() -> str:
 
 if __name__ == "__main__":
     # print("Starting FastMCP server on http://0.0.0.0:8000")
-    mcp.run(transport="http")
-    # mcp.run()
+    if "--stdio" in sys.argv:
+        mcp.run()
+    else:
+        mcp.run(transport="http")

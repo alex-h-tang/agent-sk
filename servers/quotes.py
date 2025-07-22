@@ -6,18 +6,18 @@ class QuotesPluginLogic:
     def __init__(self, dv_client: Any):
         self.dv = dv_client
 
-    async def list_quotes(self, top: int = 5) -> List[Dict[str, Any]]:
+    def list_quotes(self, top: int = 5) -> List[Dict[str, Any]]:
         """List the top N quotes from Dataverse."""
         odata_query = f"$top={top}"
-        return await self.dv.query("quotes", odata_query)
+        return self.dv.query("quotes", odata_query)
 
-    async def get_quote(self, quote_id: str) -> Dict[str, Any]:
+    def get_quote(self, quote_id: str) -> Dict[str, Any]:
         """Retrieve a single quote by its ID."""
-        return await self.dv.retrieve("quotes", quote_id)
+        return self.dv.retrieve("quotes", quote_id)
 
-    async def inspect_quote_fields(self) -> List[str]:
+    def inspect_quote_fields(self) -> List[str]:
         """Return the columns for a quote record."""
-        records = await self.dv.query("quotes", "$top=1")
+        records = self.dv.query("quotes", "$top=1")
         return list(records[0].keys()) if records else []
 
 def create_quotes_plugin_server(dv_client: Any) -> FastMCP:
