@@ -1,0 +1,4 @@
+2025-07-22 09:36:32,528 - INFO - FastMCP server object created.
+2025-07-22 09:36:32,529 - INFO - Server script is starting...
+2025-07-22 09:36:32,563 - INFO - Processing request of type ListToolsRequest
+2025-07-22 09:36:32,566 - INFO - Processing request of type ListPromptsRequest

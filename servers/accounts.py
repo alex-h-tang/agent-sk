@@ -6,7 +6,7 @@ class AccountsPluginLogic:
     def __init__(self, dv_client: Any):
         self.dv = dv_client
 
-    async def list_accounts(
+    def list_accounts(
         self,
         top: int = 5,
         region: Optional[str] = None,
@@ -40,15 +40,15 @@ class AccountsPluginLogic:
             parts.append(order_str)
 
         odata_query = "&".join(parts)
-        return await self.dv.query("accounts", odata_query)
-
-    async def get_account(self, account_id: str) -> Dict[str, Any]:
+        return self.dv.query("accounts", odata_query)
+    
+    def get_account(self, account_id: str) -> Dict[str, Any]:
         """Retrieve a single account by its ID."""
-        return await self.dv.retrieve("accounts", account_id)
-
-    async def inspect_account_fields(self) -> List[str]:
+        return self.dv.retrieve("accounts", account_id)
+    
+    def inspect_account_fields(self) -> List[str]:
         """Return the columns for an account record."""
-        records = await self.dv.query("accounts", "$top=1")
+        records = self.dv.query("accounts", "$top=1")
         return list(records[0].keys()) if records else []
 
 def create_accounts_plugin_server(dv_client: Any) -> FastMCP:

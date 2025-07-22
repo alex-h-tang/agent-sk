@@ -40,24 +40,27 @@ def register_plugins(mcp_server: FastMCP, plugin_classes: list):
                 continue
 
             def create_tool_function(p_class, m_name):
-
                 original_method = getattr(p_class, m_name)
 
                 async def tool_function(**kwargs):
                     ctx = get_context()
                     dv_client = ctx.lifespan_context.dv_client
-                    plugin_instance = p_class(dv_client)
-                    result = getattr(plugin_instance, m_name)(**kwargs)
-                    if inspect.isawaitable(result):
-                        return await result
-                    return result
+                    if p_class not in plugin_instances:
+                        plugin_instances[p_class] = p_class(dv_client)
+
+                    plugin_instance = plugin_instances[p_class]
+                    method_to_call = getattr(plugin_instance, m_name)
+                    result = method_to_call(**kwargs)
+                    return await result if inspect.isawaitable(result) else result
 
                 original_sig = inspect.signature(original_method)
-                params_without_self = [p for name, p in original_sig.parameters.items() if name != 'self']
+                params_without_self = [p for name, p in original_sig.parameters.items() if name != "self"]
                 tool_function.__signature__ = original_sig.replace(parameters=params_without_self)
                 tool_function.__doc__ = inspect.getdoc(original_method)
-                
+
                 return tool_function
+
+            plugin_instances = {}
 
             tool_func = create_tool_function(plugin_class, method_name)
             tool_name = f"{plugin_class.__name__}_{method_name}"
