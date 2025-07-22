@@ -5,6 +5,12 @@ info:
 host: 'dataversemcp-h4ayfyf8ene9bycq.eastus-01.azurewebsites.net'
 schemes:
   - https
-x-ms-capabilities:
-  model-context-protocol:
-    transport: streamable-http
+paths:
+  /mcp:
+    post:
+      summary: Sales Dataverse Server
+      x-ms-agentic-protocol: mcp-streamable-1.0
+      operationId: InvokeMCP
+      responses:
+        '200':
+          description: Success

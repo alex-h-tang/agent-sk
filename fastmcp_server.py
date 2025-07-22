@@ -18,10 +18,13 @@ from servers.users import create_users_plugin_server
 
 load_dotenv()
 
+
 @dataclass
 class AppState:
     """A dataclass to hold shared application state."""
+
     dv_client: object
+
 
 @asynccontextmanager
 async def app_lifespan(server: FastMCP) -> AsyncIterator[AppState]:
@@ -31,7 +34,7 @@ async def app_lifespan(server: FastMCP) -> AsyncIterator[AppState]:
     """
     # print("Initializing Dataverse client")
     dv_client = create_dataverse_client(os.getenv("DATAVERSE_URL"))
-    
+
     # print("Mounting plugins")
     server.mount(create_accounts_plugin_server(dv_client), prefix="Accounts")
     server.mount(create_leads_plugin_server(dv_client), prefix="Leads")
@@ -45,17 +48,20 @@ async def app_lifespan(server: FastMCP) -> AsyncIterator[AppState]:
     yield AppState(dv_client=dv_client)
     # print("Server shutting down.")
 
+
 mcp = FastMCP(
     name="DataverseMCP",
-    lifespan=app_lifespan
+    lifespan=app_lifespan,
 )
+
 
 @mcp.tool
 def get_server_status() -> str:
     """Returns the operational status of the main server."""
     return "OK"
 
+
 if __name__ == "__main__":
     # print("Starting FastMCP server on http://0.0.0.0:8000")
-    # mcp.run(transport="http", host="0.0.0.0", port=8000)
-    mcp.run()
+    mcp.run(transport="http")
+    # mcp.run()
