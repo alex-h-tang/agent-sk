@@ -1,6 +1,5 @@
 import inspect
 import json
-from typing import get_type_hints
 
 from plugins.accounts_plugin import AccountsPlugin
 from plugins.opportunities_plugin import OpportunitiesPlugin

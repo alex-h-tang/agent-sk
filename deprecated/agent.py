@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from semantic_kernel import Kernel
 from semantic_kernel.agents import ChatCompletionAgent
 from semantic_kernel.connectors.ai.open_ai import AzureChatCompletion
-from semantic_kernel.connectors.mcp import MCPStreamableHttpPlugin
+# from semantic_kernel.connectors.mcp import MCPStreamableHttpPlugin
 from semantic_kernel.connectors.mcp import MCPSsePlugin
 from semantic_kernel.functions import KernelArguments
 
