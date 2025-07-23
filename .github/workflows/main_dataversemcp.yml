@@ -67,3 +67,4 @@ jobs:
           app-name: 'DataverseMCP'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5E7BC9E8C83648ECAEBA677DA2C5E081 }}
+          package: .
