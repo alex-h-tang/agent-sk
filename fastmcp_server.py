@@ -1,11 +1,16 @@
 import os
 import sys
+import uvicorn
+from starlette.requests import Request
+from starlette.responses import JSONResponse
+
 from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
 from dataclasses import dataclass
 from dotenv import load_dotenv
 
 from fastmcp import FastMCP
+from fastapi import FastAPI
 
 from config import create_dataverse_client
 
@@ -33,10 +38,10 @@ async def app_lifespan(server: FastMCP) -> AsyncIterator[AppState]:
     Manages the server's startup and shutdown lifecycle.
     Initializes the Dataverse client and mounts all plugins.
     """
-    # print("Initializing Dataverse client")
+    # print("initializing Dataverse client")
     dv_client = create_dataverse_client(os.getenv("DATAVERSE_URL"))
 
-    # print("Mounting plugins")
+    # print("mounting plugins")
     server.mount(create_accounts_plugin_server(dv_client), prefix="Accounts")
     server.mount(create_leads_plugin_server(dv_client), prefix="Leads")
     server.mount(create_opportunities_plugin_server(dv_client), prefix="Opportunities")
@@ -44,10 +49,10 @@ async def app_lifespan(server: FastMCP) -> AsyncIterator[AppState]:
     server.mount(create_products_plugin_server(dv_client), prefix="Products")
     server.mount(create_quotes_plugin_server(dv_client), prefix="Quotes")
     server.mount(create_users_plugin_server(dv_client), prefix="Users")
-    # print("All plugins mounted successfully.")
+    # print("plugins mounted")
 
     yield AppState(dv_client=dv_client)
-    # print("Server shutting down.")
+    # print("server shutting down")
 
 
 mcp = FastMCP(
@@ -68,3 +73,11 @@ if __name__ == "__main__":
         mcp.run()
     else:
         mcp.run(transport="http")
+
+
+@mcp.custom_route("/", methods=["GET"])
+async def root(request: Request) -> JSONResponse:
+    return JSONResponse({"message": "Server is running"})
+
+
+app = mcp.http_app()

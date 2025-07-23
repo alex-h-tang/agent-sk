@@ -4,3 +4,8 @@ python-dotenv>=1.0.0
 azure-identity>=1.14.0
 requests>=2.31.0
 uv>=0.7.20
+fastmcp
+fastapi
+uvicorn
+gunicorn
+starlette
