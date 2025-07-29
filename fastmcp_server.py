@@ -2,6 +2,7 @@ import os
 import sys
 from starlette.requests import Request
 from starlette.responses import JSONResponse
+from starlette.middleware.cors import CORSMiddleware
 
 from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
@@ -77,7 +78,13 @@ if __name__ == "__main__":
 async def root(request: Request) -> JSONResponse:
     return JSONResponse({"message": "Server is running"})
 
-
+# maybe fastapi instead
 app = mcp.http_app()
 
-# wrap in fastapi
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
