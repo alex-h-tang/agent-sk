@@ -103,7 +103,9 @@ def create_opportunities_plugin_server(dv_client: Any) -> FastMCP:
 
     opportunities_mcp.tool(plugin_logic.list_opportunities)
     opportunities_mcp.tool(plugin_logic.get_opportunity)
-    opportunities_mcp.tool(plugin_logic.list_opportunities_by_owner)
+    opportunities_mcp.tool(plugin_logic.get_opportunity_account)
+    opportunities_mcp.tool(plugin_logic.get_opportunity_contact)
+    # opportunities_mcp.tool(plugin_logic.list_opportunities_by_owner)
     opportunities_mcp.tool(plugin_logic.inspect_opportunity_fields)
 
     return opportunities_mcp

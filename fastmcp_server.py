@@ -1,6 +1,5 @@
 import os
 import sys
-import uvicorn
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
@@ -10,7 +9,6 @@ from dataclasses import dataclass
 from dotenv import load_dotenv
 
 from fastmcp import FastMCP
-from fastapi import FastAPI
 
 from config import create_dataverse_client
 
@@ -81,3 +79,5 @@ async def root(request: Request) -> JSONResponse:
 
 
 app = mcp.http_app()
+
+# wrap in fastapi
