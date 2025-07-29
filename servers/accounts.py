@@ -1,29 +1,36 @@
 from typing import Optional, Literal, List, Dict, Any
 from fastmcp import FastMCP
 
+
 class AccountsPluginLogic:
     """Contains the business logic for account-related operations."""
+
     def __init__(self, dv_client: Any):
         self.dv = dv_client
 
     def list_accounts(
-        self,
-        top: int = 5,
-        region: Optional[str] = None,
-        status: Optional[Literal[0, 1]] = None,
-        sort_by: Optional[str] = None,
-        sort_direction: Optional[Literal["asc", "desc"]] = None
+            self,
+            top: int = 5,
+            region: Optional[str] = None,
+            status: Optional[Literal[0, 1]] = None,
+            business_unit_id: Optional[str] = None,
+            sort_by: Optional[str] = None,
+            sort_direction: Optional[Literal["asc", "desc"]] = None
     ) -> List[Dict[str, Any]]:
         """
-        List the top N accounts from Dataverse. Optional filters for region, status, and sorting.
+        List the top N accounts from Dataverse. Optional filters for region, status, business unit, and sorting.
+        If region is provided, it filters by the specified region, must be one of the following: NAR, CALA, MEA, Europe, or APAC.
         Status must be a numeric code: 0 for active, 1 for inactive.
+        If business_unit_id is provided, it filters accounts by the owning business unit's GUID.
         If sort_by is provided, sort_direction must also be provided as 'asc' or 'desc'.
         """
         clauses = []
         if region:
             clauses.append(f"cs_accountsalesregion eq '{region}'")
-        if status is not None:
+        if status:
             clauses.append(f"statecode eq {status}")
+        if business_unit_id:
+            clauses.append(f"_owningbusinessunit_value eq {business_unit_id}")
 
         filter_str = ""
         if clauses:
@@ -41,15 +48,59 @@ class AccountsPluginLogic:
 
         odata_query = "&".join(parts)
         return self.dv.query("accounts", odata_query)
-    
-    def get_account(self, account_id: str) -> Dict[str, Any]:
+
+    def get_account(
+            self,
+            account_id: str
+    ) -> Dict[str, Any]:
         """Retrieve a single account by its ID."""
         return self.dv.retrieve("accounts", account_id)
-    
+
+    def search_accounts_by_name(
+            self,
+            search_query: str,
+            top: int = 10
+    ) -> List[Dict[str, Any]]:
+        """
+        Performs a fuzzy search for accounts, based off a query keyword (for the account name), tolerating typos and misspellings.
+        Returns top N results are ranked by relevance.
+        """
+        search_endpoint = "/api/search/v1.0/query"
+        payload = {
+            "search": search_query,
+            "entities": ["account"],
+            "top": top,
+            "fuzzy": True
+        }
+        response = self.dv.post(search_endpoint, payload)
+        records = [item.get('@search.entity')
+                   for item in response.get('value', []) if item.get('@search.entity')]
+        return records
+
+    def list_account_opportunities(
+            self,
+            account_id: str,
+            status: Optional[Literal[0, 1, 2]] = None
+    ) -> List[Dict[str, Any]]:
+        """
+        Lists all sales opportunities for a specific account.
+        Can optionally filter by opportunity status (0=Open, 1=Won, 2=Lost).
+        """
+        filter_clauses = [f"_parentaccountid_value eq {account_id}"]
+
+        if status is not None:
+            filter_clauses.append(f"statecode eq {status}")
+
+        filter_str = " and ".join(filter_clauses)
+        odata_query = f"$filter={filter_str}"
+
+        return self.dv.query("opportunities", odata_query)
+
     def inspect_account_fields(self) -> List[str]:
         """Return the columns for an account record."""
         records = self.dv.query("accounts", "$top=1")
         return list(records[0].keys()) if records else []
+
 
 def create_accounts_plugin_server(dv_client: Any) -> FastMCP:
     """Factory function to create and configure the Accounts 'plugin' server."""
@@ -58,6 +109,8 @@ def create_accounts_plugin_server(dv_client: Any) -> FastMCP:
 
     accounts_mcp.tool(plugin_logic.list_accounts)
     accounts_mcp.tool(plugin_logic.get_account)
+    accounts_mcp.tool(plugin_logic.search_accounts_by_name)
+    accounts_mcp.tool(plugin_logic.list_account_opportunities)
     accounts_mcp.tool(plugin_logic.inspect_account_fields)
 
     return accounts_mcp
