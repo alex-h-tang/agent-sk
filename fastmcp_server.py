@@ -14,6 +14,8 @@ from fastmcp import FastMCP
 from config import create_dataverse_client
 
 from servers.accounts import create_accounts_plugin_server
+from servers.competitors import create_competitors_plugin_server
+from servers.invoices import create_invoices_plugin_server
 from servers.leads import create_leads_plugin_server
 from servers.opportunities import create_opportunities_plugin_server
 from servers.orders import create_orders_plugin_server
@@ -42,6 +44,8 @@ async def app_lifespan(server: FastMCP) -> AsyncIterator[AppState]:
 
     # print("mounting plugins")
     server.mount(create_accounts_plugin_server(dv_client), prefix="Accounts")
+    server.mount(create_competitors_plugin_server(dv_client), prefix="Competitors")
+    server.mount(create_invoices_plugin_server(dv_client), prefix="Invoices")
     server.mount(create_leads_plugin_server(dv_client), prefix="Leads")
     server.mount(create_opportunities_plugin_server(dv_client), prefix="Opportunities")
     server.mount(create_orders_plugin_server(dv_client), prefix="Orders")
@@ -83,8 +87,8 @@ app = mcp.http_app()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )

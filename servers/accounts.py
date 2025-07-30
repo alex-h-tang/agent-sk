@@ -96,6 +96,52 @@ class AccountsPluginLogic:
 
         return self.dv.query("opportunities", odata_query)
 
+    def get_account_deal_summary(
+            self,
+            account_id: str
+    ) -> Dict[str, Any]:
+        """
+        Summarizes open, won, and lost opportunities and revenues for a given account's GUID.
+        """
+        summary = {
+            "open_revenue": 0,
+            "open_deal_count": 0,
+            "won_revenue": 0,
+            "won_deal_count": 0,
+            "lost_revenue": 0,
+            "lost_deal_count": 0
+        }
+
+        open_query = (
+            f"$apply=filter(_parentaccountid_value eq {account_id} and statecode eq 0)/"
+            f"aggregate($count as open_deal_count, estimatedvalue with sum as open_revenue)"
+        )
+        
+        won_query = (
+            f"$apply=filter(_parentaccountid_value eq {account_id} and statecode eq 1)/"
+            f"aggregate($count as won_deal_count, actualvalue with sum as won_revenue)"
+        )
+
+        lost_query = (
+            f"$apply=filter(_parentaccountid_value eq {account_id} and statecode eq 2)/"
+            f"aggregate($count as lost_deal_count, actualvalue with sum as lost_revenue)"
+        )
+
+        open_result = self.dv.query("opportunities", open_query)
+        if open_result:
+            summary.update(open_result[0])
+
+        won_result = self.dv.query("opportunities", won_query)
+        if won_result:
+            summary.update(won_result[0])
+
+        lost_result = self.dv.query("opportunities", lost_query)
+        if lost_result:
+            summary.update(lost_result[0])
+
+        return summary
+        
+
     def inspect_account_fields(self) -> List[str]:
         """Return the columns for an account record."""
         records = self.dv.query("accounts", "$top=1")
@@ -111,6 +157,7 @@ def create_accounts_plugin_server(dv_client: Any) -> FastMCP:
     accounts_mcp.tool(plugin_logic.get_account)
     accounts_mcp.tool(plugin_logic.search_accounts_by_name)
     accounts_mcp.tool(plugin_logic.list_account_opportunities)
+    accounts_mcp.tool(plugin_logic.get_account_deal_summary)
     accounts_mcp.tool(plugin_logic.inspect_account_fields)
 
     return accounts_mcp

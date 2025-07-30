@@ -30,13 +30,13 @@ class OpportunitiesPluginLogic:
         clauses = []
         if region:
             clauses.append(f"cs_accountsalesregion eq '{region}'")
-        if status is not None:
+        if status:
             clauses.append(f"statecode eq {status}")
         if owner_id:
             clauses.append(f"_ownerid_value eq {owner_id}")
-        if min_revenue is not None:
+        if min_revenue:
             clauses.append(f"estimatedvalue ge {min_revenue}")
-        if max_revenue is not None:
+        if max_revenue:
             clauses.append(f"estimatedvalue le {max_revenue}")
         if est_close_date_start:
             clauses.append(f"estimatedclosedate ge {est_close_date_start}")
@@ -81,6 +81,8 @@ class OpportunitiesPluginLogic:
         if not opportunity or "parentcontactid" not in opportunity:
             return None
         return opportunity.get("parentcontactid")
+    
+    
 
     def get_opportunity(self, opportunity_id: str) -> Dict[str, Any]:
         """Retrieve a single opportunity by its ID."""
