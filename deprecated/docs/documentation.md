@@ -1,3 +1,5 @@
+  
+
 # Sales Copilot MCP
 
 ## Overview
@@ -101,11 +103,6 @@ They are named based on business use (e.g., `list_account_opportunities`), and s
 
 This server is deployed as a web app through Microsoft's Azure App Service. The GitHub Actions workflow in `.github/workflows/main_dataversemcp.yml` automates build and deployment. A client secret from the Azure app must be added to repository settings for the workflow to work.
 
-Startup command for Azure
-```sh
-uvicorn fastmcp_server:app --host 0.0.0.0 --port 8000
-```
-
  <br>
 
 ## 5. Local Testing
@@ -116,18 +113,14 @@ _**Necessary imports are listed in requirements.txt.**_
 
 _**.env file must contain DATAVERSE_URL, as well as AZURE_OPENAI_API_KEY, AZURE_OPENAI_ENDPOINT, AZURE_OPENAI_DEPLOYMENT_NAME, AZURE_OPENAI_API_VERSION.**_
 
-
-Debug with MCPInspector 
-```sh
-fastmcp dev fastmcp_server.py
-```
-
-
-To locally test responses and chat with the agent, use the console after running this
+  
 
 ```sh
 
 python fastmcp_test.py
 
 ```
- 
+
+  
+
+The server will be available at `http://localhost:8000` by default. To test responses and chat with the agent, use the console.
