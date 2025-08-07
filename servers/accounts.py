@@ -73,9 +73,10 @@ class AccountsPluginLogic:
             "fuzzy": True
         }
         response = self.dv.post(search_endpoint, payload)
-        records = [item.get('@search.entity')
-                   for item in response.get('value', []) if item.get('@search.entity')]
-        return records
+        # records = [item.get('@search.entity')
+        #            for item in response.get('value', []) if item.get('@search.entity')]
+        # return records
+        return response
 
     def list_account_opportunities(
             self,
@@ -95,6 +96,18 @@ class AccountsPluginLogic:
         odata_query = f"$filter={filter_str}"
 
         return self.dv.query("opportunities", odata_query)
+    
+    def list_account_orders(
+            self,
+            account_id: str,
+            status: Optional[Literal[0, 1, 2, 3, 4]] = None
+    ) -> List[Dict[str, Any]]:
+        """
+        Lists all sales orders for a specific account.
+        Can optionally filter by order status (0=Active, 1=Submitted, 2=Cancelled, 3=Fulfilled, 4=Invoiced).
+        """
+        filter_clauses = [f"_parentaccountid_value eq {account_id}"]
+        # TODO: all of it lol
 
     def get_account_deal_summary(
             self,

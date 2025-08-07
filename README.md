@@ -99,7 +99,7 @@ They are named based on business use (e.g., `list_account_opportunities`), and s
 
   
 
-This server is deployed as a web app through Microsoft's Azure App Service. The GitHub Actions workflow in `.github/workflows/main_dataversemcp.yml` automates build and deployment. A client secret from the Azure app must be added to repository settings for the workflow to work.
+This server is deployed as a web app through Microsoft's Azure App Service. The GitHub Actions workflow in `.github/workflows/main_dataversemcp.yml` automates build and deployment. A client secret from the Azure app must be added to repository settings for the workflow to work. A managed identity for the app must be setup, so the app can access Microsoft Dataverse.
 
 Startup command for Azure
 ```sh

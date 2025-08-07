@@ -88,6 +88,28 @@ class ProductsPluginLogic:
             odata_query = f"{filter_query}&{select_query}"
             results = self.dv.query("products", odata_query)
             return results[0] if results else {}
+        
+    def search_products_by_name(
+            self,
+            search_query: str,
+            top: int = 10
+    ) -> List[Dict[str, Any]]:
+        """
+        Fuzzy search for products, based off a query keyword, allowing for typos and misspellings.
+        Returns top N results are ranked by relevance.
+        """
+        search_endpoint = "/api/search/v1.0/query"
+        payload = {
+            "search": search_query,
+            "entities": ["product"],
+            "top": top,
+            "fuzzy": True
+        }
+        response = self.dv.post(search_endpoint, payload)
+        # records = [item.get('@search.entity')
+        #            for item in response.get('value', []) if item.get('@search.entity')]
+        # return records
+        return response
 
     def inspect_product_fields(self) -> List[str]:
         """Return the columns for a product record."""

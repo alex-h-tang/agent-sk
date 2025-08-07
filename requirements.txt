@@ -1,11 +1,9 @@
 azure-identity>=1.14.0
 fastapi
 fastmcp
-gunicorn
 mcp>=0.3.0
 python-dotenv>=1.0.0
 requests>=2.31.0
-semantic-kernel>=1.28.1
 starlette
 uv>=0.7.20
 uvicorn

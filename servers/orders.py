@@ -14,6 +14,11 @@ class OrdersPluginLogic:
     def get_order(self, order_number: str) -> Dict[str, Any]:
         """Retrieve a single order by its order number."""
         return self.dv.retrieve("salesorders", order_number)
+    
+    def get_orders_by_account(self, account_id: str) -> List[Dict[str, Any]]:
+        """Retrieve orders associated with a specific account ID."""
+        odata_query = f"$filter=_customerid_value eq {account_id}"
+        return self.dv.query("salesorders", odata_query)
 
     def inspect_order_fields(self) -> List[str]:
         """Return the columns for an order record."""
@@ -27,6 +32,7 @@ def create_orders_plugin_server(dv_client: Any) -> FastMCP:
 
     orders_mcp.tool(plugin_logic.list_orders)
     orders_mcp.tool(plugin_logic.get_order)
+    orders_mcp.tool(plugin_logic.get_orders_by_account)
     orders_mcp.tool(plugin_logic.inspect_order_fields)
 
     return orders_mcp

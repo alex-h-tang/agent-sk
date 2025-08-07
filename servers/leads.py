@@ -1,4 +1,3 @@
-# plugins_mcp/leads.py
 from typing import List, Dict, Any
 from fastmcp import FastMCP
 

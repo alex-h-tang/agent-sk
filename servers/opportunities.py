@@ -26,7 +26,6 @@ class OpportunitiesPluginLogic:
         If region is provided, it filters by the specified region, must be one of the following: NAR, CALA, MEA, Europe, or APAC.
         If sort_by is provided, sort_direction must also be provided as 'asc' or 'desc'.
         """
-        # TODO: implement est_revenue filtering
         clauses = []
         if region:
             clauses.append(f"cs_accountsalesregion eq '{region}'")
@@ -81,17 +80,15 @@ class OpportunitiesPluginLogic:
         if not opportunity or "parentcontactid" not in opportunity:
             return None
         return opportunity.get("parentcontactid")
-    
-    
 
     def get_opportunity(self, opportunity_id: str) -> Dict[str, Any]:
         """Retrieve a single opportunity by its ID."""
         return self.dv.retrieve("opportunities", opportunity_id)
 
-    # def list_opportunities_by_owner(self, user_id: str) -> List[Dict[str, Any]]:
-    #     """List opportunities owned by a specific user, based on user_id."""
-    #     odata_query = f"$filter=_ownerid_value eq {user_id}"
-    #     return self.dv.query("opportunities", odata_query)
+    def list_opportunities_by_owner(self, user_id: str) -> List[Dict[str, Any]]:
+        """List opportunities owned by a specific user, based on user_id."""
+        odata_query = f"$filter=_ownerid_value eq {user_id}"
+        return self.dv.query("opportunities", odata_query)
 
     def inspect_opportunity_fields(self) -> List[str]:
         """Return the columns for an opportunity record."""
@@ -107,7 +104,7 @@ def create_opportunities_plugin_server(dv_client: Any) -> FastMCP:
     opportunities_mcp.tool(plugin_logic.get_opportunity)
     opportunities_mcp.tool(plugin_logic.get_opportunity_account)
     opportunities_mcp.tool(plugin_logic.get_opportunity_contact)
-    # opportunities_mcp.tool(plugin_logic.list_opportunities_by_owner)
+    opportunities_mcp.tool(plugin_logic.list_opportunities_by_owner)
     opportunities_mcp.tool(plugin_logic.inspect_opportunity_fields)
 
     return opportunities_mcp
